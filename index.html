@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pratilipi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --line-color: black;
+      --highlight-color: #e91e63;
+      --bg-color: white;
+      --text-color: black;
+      --flower-display: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    h2 {
+      margin: 0;
+      padding-bottom: 2px;
+    }
+
+    .tagline {
+      font-size: 14px;
+      margin-top: 0;
+    }
+
+    .header {
+      position: relative;
+    }
+
+    .header-controls {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .color-dropdown {
+      position: absolute;
+      top: 0;
+      right: 50px;
+      display: inline-block;
+    }
+
+    .color-dropdown select {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px 8px;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+    }
+
+    .header-controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      padding: 0 4px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    button, select {
+      padding: 10px;
+      font-size: 14px;
+      flex: 1 1 48%;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      width: 100%;
+      height: 60vh;
+      padding: 20px 10px;
+      font-size: 16px;
+      border: 1px solid var(--line-color);
+      resize: vertical;
+      line-height: 30px;
+      box-sizing: border-box;
+      background-color: transparent;
+      background-attachment: local;
+      color: var(--text-color);
+    }
+
+    .page-none textarea {
+      background-image: none;
+    }
+
+    .page-one textarea {
+      background-image: repeating-linear-gradient(to bottom, var(--line-color), var(--line-color) 1px, transparent 1px, transparent 30px);
+      background-size: 100% 30px;
+    }
+
+    .page-four textarea {
+      background-image:
+        linear-gradient(to bottom, var(--highlight-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--highlight-color) 1px, transparent 1px);
+      background-size: 100% 100px;
+      background-position: 0px 0px, 0px 25px, 0px 50px, 0px 75px;
+    }
+
+    .info-line {
+      font-size: 13px;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+    }
+
+    .dark-mode {
+      --line-color: white;
+      --highlight-color: white;
+      --bg-color: black;
+      --text-color: white;
+    }
+
+    @media (max-width: 600px) {
+      .header-controls {
+        top: 0;
+        right: 0;
+      }
+    }
+  </style>
+</head>
+<body class="page-none">
+
+  <div class="header">
+    <h2>📝 Pratilipi</h2>
+    <div class="tagline">Your Stories Start Here</div>
+    
+    <div class="header-controls">
+      <button onclick="toggleDarkMode()" title="Toggle Dark Mode" id="modeToggle">🌙</button>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button onclick="saveNote()">💾 Save</button>
+    <button onclick="downloadNote()">⬇️ Download</button>
+    <button onclick="printNote()">🖨️ Print</button>
+    <button onclick="clearNote()">🗑️ Clear</button>
+    <button onclick="shareNote()">📤 Share</button>
+    <button onclick="copyNote()">📋 Copy</button>
+    <select onchange="setPageType(this.value)">
+      <option value="page-none">No Rule</option>
+      <option value="page-one">One Line</option>
+      <option value="page-four">Four Line</option>
+    </select>
+    <select onchange="setTheme(this.value)" id="colorSelect">
+      <option value="white">🎨 Colors</option>
+      <option value="white">🤍 White</option>
+      <option value="lightgreen">💚 Green</option>
+      <option value="lightcyan">🩵 Blue-Green</option>
+      <option value="lightblue">💙 Blue</option>
+      <option value="plum">💜 Purple</option>
+      <option value="tan">🤎 Brown</option>
+      <option value="darkgray">🖤 Dark Gray</option>
+      <option value="lightgray">🩶 Gray</option>
+      <option value="lightpink">🩷 Pink</option>
+    </select>
+  </div>
+
+  <div class="info-line">
+    Offline. Private. Stored safely in your browser only.
+  </div>
+
+  <textarea id="noteArea" oninput="autoSave()"></textarea>
+
+  <div class="footer">
+    Made with ❤️ by sauravhhh
+  </div>
+
+  <script>
+    const textarea = document.getElementById("noteArea");
+    const body = document.body;
+    const modeBtn = document.getElementById("modeToggle");
+
+    function autoSave() {
+      localStorage.setItem("note", textarea.value);
+    }
+
+    function saveNote() {
+      localStorage.setItem("note", textarea.value);
+      alert("Note saved offline.");
+    }
+
+    function loadNote() {
+      const saved = localStorage.getItem("note");
+      if (saved) textarea.value = saved;
+    }
+
+    function clearNote() {
+      if (confirm("Clear the note?")) {
+        textarea.value = "";
+        localStorage.removeItem("note");
+      }
+    }
+
+    function downloadNote() {
+      const content = textarea.value;
+      const html = "<!DOCTYPE html><html><body><pre>" + content.replace(/</g, "&lt;") + "</pre></body></html>";
+      const blob = new Blob([html], {type: "text/html"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "my_note.html";
+      a.click();
+    }
+
+    function printNote() {
+      const win = window.open("", "", "width=800,height=600");
+      win.document.write("<pre>" + textarea.value.replace(/</g, "&lt;") + "</pre>");
+      win.document.close();
+      win.print();
+    }
+
+    function shareNote() {
+      if (navigator.share) {
+        navigator.share({
+          title: "My Notes",
+          text: textarea.value
+        }).catch(err => console.log("Share canceled or failed", err));
+      } else {
+        alert("Sharing not supported on this device.");
+      }
+    }
+
+    function copyNote() {
+      textarea.select();
+      document.execCommand('copy');
+      alert("Copied to clipboard.");
+    }
+
+    function setPageType(type) {
+      body.classList.remove("page-none", "page-one", "page-four");
+      body.classList.add(type);
+    }
+
+    function toggleDarkMode() {
+      body.classList.toggle("dark-mode");
+      modeBtn.textContent = body.classList.contains("dark-mode") ? "☀️" : "🌙";
+      
+      // Reset color dropdown to white when switching to/from dark mode
+      if (body.classList.contains("dark-mode")) {
+        document.getElementById('colorSelect').value = 'white';
+      }
+    }
+
+    function setTheme(color) {
+      body.classList.remove("dark-mode");
+      document.documentElement.style.setProperty('--bg-color', color);
+      document.documentElement.style.setProperty('--text-color', 'black');
+      modeBtn.textContent = "🌙";
+      
+      if (color === 'darkgray') {
+        document.documentElement.style.setProperty('--text-color', 'white');
+      }
+      
+      // Update the dropdown selection
+      const colorSelect = document.getElementById('colorSelect');
+      colorSelect.value = color;
+    }
+
+    // Initialize
+    loadNote();
+  </script>
+
+</body>
+</html>
