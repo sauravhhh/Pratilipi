@@ -1,110 +1,194 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Pratilipi</title>
+  <title>Pratilipi — Minimal Notes</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --line-color: black;
-      --highlight-color: #e91e63;
-      --bg-color: white;
-      --text-color: black;
-      --flower-display: none;
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #111111;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --border-strong: #d1d5db;
+      --hover: #f3f4f6;
+      --line-color: #d1d5db;
+      --highlight-color: #9ca3af;
+      --radius: 10px;
     }
+
+    .dark-mode {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --text: #f5f5f5;
+      --muted: #9ca3af;
+      --border: #262626;
+      --border-strong: #404040;
+      --hover: #1f1f1f;
+      --line-color: #404040;
+      --highlight-color: #525252;
+    }
+
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      padding: 16px;
-      font-family: Arial, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.25s ease, color 0.25s ease;
     }
 
-    h2 {
-      margin: 0;
-      padding-bottom: 2px;
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
     }
 
-    .tagline {
-      font-size: 14px;
-      margin-top: 0;
-    }
-
+    /* Header */
     .header {
-      position: relative;
-    }
-
-    .header-controls {
-      position: absolute;
-      top: 0;
-      right: 0;
       display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
       align-items: center;
-    }
-
-    .color-dropdown {
-      position: absolute;
-      top: 0;
-      right: 50px;
-      display: inline-block;
-    }
-
-    .color-dropdown select {
-      background: none;
-      border: none;
+      justify-content: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       cursor: pointer;
-      font-size: 16px;
-      padding: 4px 8px;
-      color: var(--text-color);
-      background-color: var(--bg-color);
+      color: var(--text);
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
 
-    .header-controls button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 20px;
-      padding: 0 4px;
+    .icon-btn:hover {
+      background: var(--hover);
+      border-color: var(--border-strong);
     }
 
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    /* Toolbar */
     .toolbar {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 10px 0;
+      margin-bottom: 8px;
     }
 
-    button, select {
-      padding: 10px;
-      font-size: 14px;
-      flex: 1 1 48%;
-      box-sizing: border-box;
+    .btn {
+      appearance: none;
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 550;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
 
+    .btn:hover {
+      background: var(--hover);
+      border-color: var(--border-strong);
+    }
+
+    .btn.danger:hover {
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+
+    .dark-mode .btn.danger:hover {
+      color: #f87171;
+      border-color: #7f1d1d;
+    }
+
+    select.btn {
+      padding-right: 8px;
+    }
+
+    select.btn option {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .toolbar-sep {
+      width: 1px;
+      align-self: stretch;
+      background: var(--border);
+      margin: 4px 2px;
+    }
+
+    /* Info line */
+    .info-line {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin: 14px 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .info-line .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+
+    /* Editor */
     textarea {
       width: 100%;
-      height: 60vh;
-      padding: 20px 10px;
+      min-height: 58vh;
+      padding: 22px;
       font-size: 16px;
-      border: 1px solid var(--line-color);
+      font-family: inherit;
+      line-height: 1.9;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       resize: vertical;
-      line-height: 30px;
-      box-sizing: border-box;
-      background-color: transparent;
+      outline: none;
+      transition: border-color 0.15s ease, background 0.25s ease;
       background-attachment: local;
-      color: var(--text-color);
     }
 
-    .page-none textarea {
-      background-image: none;
+    textarea:focus {
+      border-color: var(--border-strong);
     }
+
+    .page-none textarea { background-image: none; }
 
     .page-one textarea {
-      background-image: repeating-linear-gradient(to bottom, var(--line-color), var(--line-color) 1px, transparent 1px, transparent 30px);
-      background-size: 100% 30px;
+      background-image: repeating-linear-gradient(to bottom, var(--line-color), var(--line-color) 1px, transparent 1px, transparent 34px);
+      background-size: 100% 34px;
+      line-height: 34px;
     }
 
     .page-four textarea {
@@ -113,87 +197,75 @@
         linear-gradient(to bottom, var(--line-color) 1px, transparent 1px),
         linear-gradient(to bottom, var(--line-color) 1px, transparent 1px),
         linear-gradient(to bottom, var(--highlight-color) 1px, transparent 1px);
-      background-size: 100% 100px;
-      background-position: 0px 0px, 0px 25px, 0px 50px, 0px 75px;
-    }
-
-    .info-line {
-      font-size: 13px;
-      text-align: center;
-      margin: 10px 0;
+      background-size: 100% 136px;
+      background-position: 0 0, 0 34px, 0 68px, 0 102px;
+      line-height: 34px;
     }
 
     .footer {
       text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
+      margin-top: 36px;
+      font-size: 12.5px;
+      color: var(--muted);
     }
 
-    .dark-mode {
-      --line-color: white;
-      --highlight-color: white;
-      --bg-color: black;
-      --text-color: white;
-    }
-
-    @media (max-width: 600px) {
-      .header-controls {
-        top: 0;
-        right: 0;
-      }
+    @media (max-width: 560px) {
+      .page { padding: 24px 16px 40px; }
+      .toolbar-sep { display: none; }
     }
   </style>
 </head>
 <body class="page-none">
 
-  <div class="header">
-    <h2>📝 Pratilipi</h2>
-    <div class="tagline">Your Stories Start Here</div>
-    
-    <div class="header-controls">
-      <button onclick="toggleDarkMode()" title="Toggle Dark Mode" id="modeToggle">🌙</button>
+  <div class="page">
+    <div class="header">
+      <div class="brand">
+        <h1>Pratilipi</h1>
+        <p>Your stories start here.</p>
+      </div>
+      <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode" id="modeToggle" aria-label="Toggle dark mode"></button>
     </div>
-  </div>
-  <div class="toolbar">
-    <button onclick="saveNote()">💾 Save</button>
-    <button onclick="downloadNote()">⬇️ Download</button>
-    <button onclick="printNote()">🖨️ Print</button>
-    <button onclick="clearNote()">🗑️ Clear</button>
-    <button onclick="shareNote()">📤 Share</button>
-    <button onclick="copyNote()">📋 Copy</button>
-    <select onchange="setPageType(this.value)">
-      <option value="page-none">No Rule</option>
-      <option value="page-one">One Line</option>
-      <option value="page-four">Four Line</option>
-    </select>
-    <select onchange="setTheme(this.value)" id="colorSelect">
-      <option value="white">🎨 Colors</option>
-      <option value="white">🤍 White</option>
-      <option value="lightgreen">💚 Green</option>
-      <option value="lightcyan">🩵 Blue-Green</option>
-      <option value="lightblue">💙 Blue</option>
-      <option value="plum">💜 Purple</option>
-      <option value="tan">🤎 Brown</option>
-      <option value="darkgray">🖤 Dark Gray</option>
-      <option value="lightgray">🩶 Gray</option>
-      <option value="lightpink">🩷 Pink</option>
-    </select>
-  </div>
 
-  <div class="info-line">
-    Private. Stored safely in your browser only.
-  </div>
+    <div class="toolbar">
+      <button class="btn" onclick="saveNote()">Save</button>
+      <button class="btn" onclick="copyNote()">Copy</button>
+      <button class="btn" onclick="shareNote()">Share</button>
+      <button class="btn" onclick="downloadNote()">Download</button>
+      <button class="btn" onclick="printNote()">Print</button>
+      <button class="btn danger" onclick="clearNote()">Clear</button>
+      <div class="toolbar-sep"></div>
+      <select class="btn" onchange="setPageType(this.value)" aria-label="Page style">
+        <option value="page-none">Plain</option>
+        <option value="page-one">Ruled</option>
+        <option value="page-four">Ruled+</option>
+      </select>
+      <select class="btn" onchange="setTheme(this.value)" id="colorSelect" aria-label="Theme">
+        <option value="white">White</option>
+        <option value="lightgreen">Green</option>
+        <option value="lightcyan">Teal</option>
+        <option value="lightblue">Blue</option>
+        <option value="plum">Purple</option>
+        <option value="tan">Brown</option>
+        <option value="lightpink">Pink</option>
+        <option value="lightgray">Gray</option>
+        <option value="darkgray">Dark gray</option>
+      </select>
+    </div>
 
-  <textarea id="noteArea" oninput="autoSave()"></textarea>
+    <div class="info-line"><span class="dot"></span>Private — stored only in this browser.</div>
 
-  <div class="footer">
-    Made with ❤️ by sauravhhh
+    <textarea id="noteArea" oninput="autoSave()" placeholder="Start writing…"></textarea>
+
+    <div class="footer">Made by sauravhhh</div>
   </div>
 
   <script>
     const textarea = document.getElementById("noteArea");
     const body = document.body;
     const modeBtn = document.getElementById("modeToggle");
+
+    const MOON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    const SUN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
 
     function autoSave() {
       localStorage.setItem("note", textarea.value);
@@ -257,8 +329,8 @@
 
     function toggleDarkMode() {
       body.classList.toggle("dark-mode");
-      modeBtn.textContent = body.classList.contains("dark-mode") ? "☀️" : "🌙";
-      
+      modeBtn.innerHTML = body.classList.contains("dark-mode") ? SUN_SVG : MOON_SVG;
+
       // Reset color dropdown to white when switching to/from dark mode
       if (body.classList.contains("dark-mode")) {
         document.getElementById('colorSelect').value = 'white';
@@ -267,20 +339,25 @@
 
     function setTheme(color) {
       body.classList.remove("dark-mode");
-      document.documentElement.style.setProperty('--bg-color', color);
-      document.documentElement.style.setProperty('--text-color', 'black');
-      modeBtn.textContent = "🌙";
-      
+      const root = document.documentElement.style;
+      root.setProperty('--bg', color);
+      root.setProperty('--surface', color);
+      root.setProperty('--text', 'black');
+      root.setProperty('--muted', '#6b7280');
+      modeBtn.innerHTML = MOON_SVG;
+
       if (color === 'darkgray') {
-        document.documentElement.style.setProperty('--text-color', 'white');
+        root.setProperty('--text', 'white');
+        root.setProperty('--muted', '#9ca3af');
       }
-      
+
       // Update the dropdown selection
       const colorSelect = document.getElementById('colorSelect');
       colorSelect.value = color;
     }
 
     // Initialize
+    modeBtn.innerHTML = MOON_SVG;
     loadNote();
   </script>
 
