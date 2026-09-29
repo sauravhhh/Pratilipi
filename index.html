@@ -98,34 +98,49 @@
 
     .icon-btn svg { width: 18px; height: 18px; }
 
-    /* Toolbar */
+    /* Toolbar: 4-column icon grid */
     .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .btn {
       appearance: none;
-      padding: 10px 18px;
-      font-size: 13.5px;
-      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 6px 12px;
       font-family: inherit;
       color: var(--text);
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
     }
 
+    .btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .btn .lbl {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+    }
+
     .btn:hover {
       background: var(--hover);
       border-color: var(--border-strong);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
     }
 
     .btn:active {
@@ -138,25 +153,50 @@
       border-color: #fca5a5;
     }
 
+    .btn.danger:hover .lbl {
+      color: #dc2626;
+    }
+
     .dark-mode .btn.danger:hover {
       color: #f87171;
       border-color: #7f1d1d;
     }
 
-    select.btn {
-      padding-right: 8px;
+    .dark-mode .btn.danger:hover .lbl {
+      color: #f87171;
     }
 
-    select.btn option {
+    /* Dropdown row under the icon grid */
+    .tool-selects {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    select.select-btn {
+      appearance: none;
+      flex: 1;
+      padding: 11px 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    select.select-btn:hover {
+      border-color: var(--border-strong);
+      background: var(--hover);
+    }
+
+    select.select-btn option {
       background: var(--surface);
       color: var(--text);
-    }
-
-    .toolbar-sep {
-      width: 1px;
-      align-self: stretch;
-      background: var(--border);
-      margin: 4px 2px;
     }
 
     /* Info line */
@@ -243,19 +283,38 @@
     </div>
 
     <div class="toolbar">
-      <button class="btn" onclick="saveNote()">Save</button>
-      <button class="btn" onclick="copyNote()">Copy</button>
-      <button class="btn" onclick="shareNote()">Share</button>
-      <button class="btn" onclick="downloadNote()">Download</button>
-      <button class="btn" onclick="printNote()">Print</button>
-      <button class="btn danger" onclick="clearNote()">Clear</button>
-      <div class="toolbar-sep"></div>
-      <select class="btn" onchange="setPageType(this.value)" aria-label="Page style">
+      <button class="btn" onclick="saveNote()" title="Save">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span class="lbl">Save</span>
+      </button>
+      <button class="btn" onclick="copyNote()" title="Copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span class="lbl">Copy</span>
+      </button>
+      <button class="btn" onclick="shareNote()" title="Share">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span class="lbl">Share</span>
+      </button>
+      <button class="btn" onclick="downloadNote()" title="Download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="lbl">Download</span>
+      </button>
+      <button class="btn" onclick="printNote()" title="Print">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span class="lbl">Print</span>
+      </button>
+      <button class="btn danger" onclick="clearNote()" title="Clear">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span class="lbl">Clear</span>
+      </button>
+    </div>
+    <div class="tool-selects">
+      <select class="select-btn" onchange="setPageType(this.value)" aria-label="Page style">
         <option value="page-none">Plain</option>
         <option value="page-one">Ruled</option>
         <option value="page-four">Ruled+</option>
       </select>
-      <select class="btn" onchange="setTheme(this.value)" id="colorSelect" aria-label="Theme">
+      <select class="select-btn" onchange="setTheme(this.value)" id="colorSelect" aria-label="Theme">
         <option value="white">White</option>
         <option value="lightgreen">Green</option>
         <option value="lightcyan">Teal</option>
